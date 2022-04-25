@@ -11,11 +11,21 @@ class MainInteractor {
         fun getStoresCallback(stores: MutableList<StoreEntity>)
     }
 
-    fun getStoresCallback(callback: StoresCallback) {
+    /*fun getStoresCallback(callback:  StoresCallback) {
         doAsync {
             val storeList = StoreApplication.database.storeDao().getAllStores()
             uiThread {
                 callback.getStoresCallback(storeList)
+            }
+        }
+    }*/
+
+    //Use of higher-order function
+    fun getStores(callback: (MutableList<StoreEntity>) -> Unit ){
+        doAsync {
+            val storeList = StoreApplication.database.storeDao().getAllStores()
+            uiThread {
+                callback(storeList)
             }
         }
     }
