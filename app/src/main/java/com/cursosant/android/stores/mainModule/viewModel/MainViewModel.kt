@@ -12,12 +12,17 @@ class MainViewModel : ViewModel() {
     private var interactor: MainInteractor
 
     //Properties
-    private var stores: MutableLiveData<List<StoreEntity>>
+    //private var stores: MutableLiveData<List<StoreEntity>>
 
     init {
         interactor = MainInteractor()
-        stores = MutableLiveData()
-        loadStores()
+    }
+
+    //Initialize variable using lazy and do something else with the scope function called also
+    private val stores : MutableLiveData<List<StoreEntity>> by lazy {
+        MutableLiveData<List<StoreEntity>>().also {
+            loadStores()
+        }
     }
 
     //Propertie to be observed within the UI
