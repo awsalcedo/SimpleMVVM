@@ -11,10 +11,13 @@ class MainViewModel : ViewModel() {
     //Interactor
     private var interactor: MainInteractor
 
+    private var storeList: MutableList<StoreEntity>
+
     //Properties
     //private var stores: MutableLiveData<List<StoreEntity>>
 
     init {
+        storeList = mutableListOf()
         interactor = MainInteractor()
     }
 
@@ -39,7 +42,31 @@ class MainViewModel : ViewModel() {
 
         interactor.getStores {
             stores.value = it
+            storeList = it
         }
 
+    }
+
+    fun deleteStore(storeEntity: StoreEntity){
+        interactor.deleteStore(storeEntity, {
+            val index = storeList.indexOf(storeEntity)
+            if (index != -1){
+                storeList.removeAt(index)
+                //notifyItemRemoved(index)
+                stores.value = storeList
+            }
+        })
+    }
+
+    fun updateStore(storeEntity: StoreEntity){
+        storeEntity.isFavorite = !storeEntity.isFavorite
+        interactor.updateStore(storeEntity, {
+            val index = storeList.indexOf(storeEntity)
+            if (index != -1){
+                storeList.set(index, storeEntity)
+                //notifyItemChanged(index)
+                stores.value = storeList
+            }
+        })
     }
 }

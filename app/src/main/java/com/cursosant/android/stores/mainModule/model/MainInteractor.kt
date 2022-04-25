@@ -7,9 +7,9 @@ import org.jetbrains.anko.uiThread
 
 class MainInteractor {
 
-    interface StoresCallback {
+    /*interface StoresCallback {
         fun getStoresCallback(stores: MutableList<StoreEntity>)
-    }
+    }*/
 
     /*fun getStoresCallback(callback:  StoresCallback) {
         doAsync {
@@ -21,7 +21,7 @@ class MainInteractor {
     }*/
 
     //Use of higher-order function
-    fun getStores(callback: (MutableList<StoreEntity>) -> Unit ){
+    fun getStores(callback: (MutableList<StoreEntity>) -> Unit) {
         doAsync {
             val storeList = StoreApplication.database.storeDao().getAllStores()
             uiThread {
@@ -29,4 +29,23 @@ class MainInteractor {
             }
         }
     }
+
+    fun deleteStore(storeEntity: StoreEntity, callback: (StoreEntity) -> Unit) {
+        doAsync {
+            StoreApplication.database.storeDao().deleteStore(storeEntity)
+            uiThread {
+                callback(storeEntity)
+            }
+        }
+    }
+
+    fun updateStore(storeEntity: StoreEntity, callback: (StoreEntity) -> Unit) {
+        doAsync {
+            StoreApplication.database.storeDao().updateStore(storeEntity)
+            uiThread {
+                callback(storeEntity)
+            }
+        }
+    }
+
 }
