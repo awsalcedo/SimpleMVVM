@@ -50,9 +50,12 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
 
         mEditStoreViewModel = ViewModelProvider(this).get(EditStoreViewModel::class.java)
-        mEditStoreViewModel.getShowFab().observe(this, { isVisible ->
+        mEditStoreViewModel.getShowFab().observe(this) { isVisible ->
             if (isVisible) mBinding.fab.show() else mBinding.fab.hide()
-        })
+        }
+        mEditStoreViewModel.getStoreSelected().observe(this) {
+            mAdapter.add(it)
+        }
     }
 
     private fun launchEditFragment(storeEntity: StoreEntity = StoreEntity()) {
