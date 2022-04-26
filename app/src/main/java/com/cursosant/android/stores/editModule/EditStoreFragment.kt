@@ -30,7 +30,7 @@ class EditStoreFragment : Fragment() {
     private lateinit var mEditStoreViewModel: EditStoreViewModel
     private var mActivity: MainActivity? = null
     private var mIsEditMode: Boolean = false
-    private var mStoreEntity: StoreEntity? = null
+    private lateinit var mStoreEntity: StoreEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +83,9 @@ class EditStoreFragment : Fragment() {
 
             when (result) {
                 is Long -> {
-                    mStoreEntity!!.id = result
+                    mStoreEntity.id = result
 
-                    mEditStoreViewModel.setStoreSelected(mStoreEntity!!)
+                    mEditStoreViewModel.setStoreSelected(mStoreEntity)
 
                     Toast.makeText(
                         mActivity,
@@ -95,7 +95,7 @@ class EditStoreFragment : Fragment() {
                     mActivity?.onBackPressed()
                 }
                 is StoreEntity -> {
-                    mEditStoreViewModel.setStoreSelected(mStoreEntity!!)
+                    mEditStoreViewModel.setStoreSelected(mStoreEntity)
                     Snackbar.make(
                         mBinding.root,
                         R.string.edit_store_message_update_success,
@@ -166,8 +166,7 @@ class EditStoreFragment : Fragment() {
                 true
             }
             R.id.action_save -> {
-                if (mStoreEntity != null &&
-                    validateFields(mBinding.tilPhotoUrl, mBinding.tilPhone, mBinding.tilName)
+                if (validateFields(mBinding.tilPhotoUrl, mBinding.tilPhone, mBinding.tilName)
                 ) {
                     with(mStoreEntity!!) {
                         name = mBinding.etName.text.toString().trim()
@@ -176,8 +175,8 @@ class EditStoreFragment : Fragment() {
                         photoUrl = mBinding.etPhotoUrl.text.toString().trim()
                     }
 
-                    if (mIsEditMode) mEditStoreViewModel.updateStore(mStoreEntity!!)
-                    else mEditStoreViewModel.saveStore(mStoreEntity!!)
+                    if (mIsEditMode) mEditStoreViewModel.updateStore(mStoreEntity)
+                    else mEditStoreViewModel.saveStore(mStoreEntity)
                 }
                 true
             }
